@@ -18,7 +18,7 @@ fe = FeatureExtractor(load_model(model_dir + '/IR.h5', compile=False))
 
 img_paths = list()
 
-for img_path in sorted(Path(base_dir).glob("*.jpeg")):
+for img_path in sorted(Path(base_dir).glob("*.jpg")):
     img_paths.append(img_path)
 
 features = np.load(feature_dir + '/features.npy')
