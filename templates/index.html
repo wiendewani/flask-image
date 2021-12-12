@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>CBIR Chest X-Ray</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="static/css/util.css">
+    <link rel="stylesheet" type="text/css" href="static/css/main.css">
+    <link rel="stylesheet" type="text/css" href="static/css/files.css">
+    <style>
+        #ïmag {
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            float: center;
+            width: 30%;
+        }
+
+        #input {
+            font-family: Poppins-Medium;
+            font-size: 15px;
+            line-height: 1.5;
+            color: #666666;
+            visibility: visible;
+            display: block;
+            width: 100%;
+            background: #e6e6e6;
+            height: 50px;
+            border-radius: 25px;
+            padding: 0 30px 0 68px;
+        }
+
+        figure img {
+            vertical-align: top;
+        }
+
+        figure figcaption {
+            text-align: center;
+        }
+    </style>
+    <!--===============================================================================================-->
+</head>
+
+<body>
+    <div class="limiter">
+        <div class="container-login100">
+            <div class="wrap-login100">
+                <div class="wrap-title">
+                    <span class="login100-form-mytitle">
+                        CBIR for Chest X-Ray Image
+                    </span>
+                </div>
+
+                <!-- preview image -->
+                <div class="login100-pic js-tilt" data-tilt>
+                    <img id="image-preview" src="{{ query_path }}" />
+                </div>
+                <!-- end of preview image -->
+
+                <!--query by upload -->
+                <form class="login100-form validate-form" method=post enctype=multipart/form-data> <span
+                    class="login100-form-title">
+                    Upload an Image File
+                    </span>
+                    <div class="container-login100-form-btn">
+                        <div class="wrap-input100 validate-input" data-validate="Image file is required" id="input">
+                            <input class="input100" id="image-source" name="query_img" onchange="previewImage();" type="file"
+                                alt="Input Image" accept="image/jpeg,image/jpg,image/png">
+                            <span class="focus-input100"></span>
+                            <span class="symbol-input100">
+                                <i class="fa fa-file" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="container-login100-form-btn">
+                        <button class="login100-form-btn" type="submit">
+                            Execute
+                        </button>
+                    </div>                    
+                </form>
+                <!-- end of query by upload -->
+                
+                <!-- query sample -->
+                <h2 style="padding-left: 10px;">
+                    Query Sample
+                </h2>
+
+                <section class="contact-section centred" style="padding-top:10px;" id="predict2">
+                    <div class="container">
+                        <table>
+                            <tr>
+                                <td>
+                                    <div class="row" style="padding-bottom: 1%;">
+                                        <div class="column">
+                                            <figure style="float: left; margin-right: 20px; margin-bottom: 20px;">
+                                                <figcaption>
+                                                    File: 0-1.jpeg
+                                                </figcaption>
+                                                <form action="/" method="post" enctype="multipart/form-data">
+                                                    <input type="hidden" name="query_img" id="count" value="static/image_db/0-1.jpeg" />
+                                                    <input type="image" name="submit" onclick="change('static/image_db/0-1.jpeg')"
+                                                        style="padding-left: 10%;"
+                                                        src="{{ url_for('static', filename='image_db/0-1.jpeg')}}"/>
+                                                </form>
+                                            </figure>
+                                        </div>                                
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="row" style="padding-bottom: 1%;">
+                                        <div class="column">
+                                            <figure style="float: left; margin-right: 20px; margin-bottom: 20px;">
+                                                <figcaption>
+                                                    File: 1-1.jpeg
+                                                </figcaption>
+                                                <form action="/" method="post" enctype="multipart/form-data">
+                                                    <input type="hidden" name="query_img" id="count" value="static/image_db/1-1.jpeg" />
+                                                    <input type="image" name="submit" onclick="change('static/image_db/1-1.jpeg')"
+                                                        style="padding-left: 10%;"
+                                                        src="{{ url_for('static', filename='image_db/1-1.jpeg')}}"/>
+                                                </form>
+                                            </figure>
+                                        </div>                                
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </section>
+                <!-- end of query sample -->
+                
+                <!-- retrieval result -->
+                {% if scores %}
+                <h2 style="padding-left: 10px;">
+                    Retrieval Result
+                </h2>
+
+                <section class="contact-section centred" style="padding-top:10px;" id="retrievalresult">
+                    <div class="container">
+                        <table>
+                            <tr>
+                                {% for col_num in range(3) %}
+                                <td>
+                                    <div class="row" style="padding-bottom: 1%;">
+                                        <div class="column">
+                                            <figure style="float: left; margin-right: 20px; margin-bottom: 20px;">
+                                                <figcaption>
+                                                    Similarity Distance: {{ scores[col_num][0]|float|round(3) }}
+                                                    <br>File: {{ scores[col_num][1].name }}
+                                                </figcaption>
+                                                <img src="{{ scores[col_num][1] }}" width="235px" height="235px">
+                                            </figure>
+                                        </div>                                
+                                    </div>
+                                </td>
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                {% for col_num in range(3,6) %}
+                                <td>
+                                    <div class="row" style="padding-bottom: 1%;">
+                                        <div class="column">
+                                            <figure style="float: left; margin-right: 20px; margin-bottom: 20px;">
+                                                <figcaption>
+                                                    Similarity Distance: {{ scores[col_num][0]|float|round(3) }}
+                                                    <br>File: {{ scores[col_num][1].name }}
+                                                </figcaption>
+                                                <img src="{{ scores[col_num][1] }}" width="235px" height="235px">
+                                            </figure>
+                                        </div>                                
+                                    </div>
+                                </td>
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                {% for col_num in range(6,9) %}
+                                <td>
+                                    <div class="row" style="padding-bottom: 1%;">
+                                        <div class="column">
+                                            <figure style="float: left; margin-right: 20px; margin-bottom: 20px;">
+                                                <figcaption>
+                                                    Similarity Distance: {{ scores[col_num][0]|float|round(3) }}
+                                                    <br>File: {{ scores[col_num][1].name }}
+                                                </figcaption>
+                                                <img src="{{ scores[col_num][1] }}" width="235px" height="235px">
+                                            </figure>
+                                        </div>                                
+                                    </div>
+                                </td>
+                                {% endfor %}
+                            </tr>
+                        </table>
+                    </div>
+                </section>
+                {% endif %}
+                <!-- end of retrieval result -->
+            </div>
+        </div>
+    </div>
+
+    <!--===============================================================================================-->
+    <script>
+        $('.js-tilt').tilt({
+            scale: 1.1
+        })
+    </script>
+    <script src="static/js/files.js"></script>
+    <!--===============================================================================================-->
+    <script src="static/js/main.js"></script>
+</body>
+</html>
