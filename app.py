@@ -14,20 +14,20 @@ feature_dir = './static/feature'
 model_dir = './static/model'
 
 # Read image features
-fe = FeatureExtractor(load_model(model_dir + '/IR.h5', compile=False))
+fe = FeatureExtractor(load_model(model_dir + '/chestxray.h5', compile=False))
 
 img_paths = list()
 
 for img_path in sorted(Path(base_dir).glob("*.jpg")):
     img_paths.append(img_path)
 
-features = np.load(feature_dir + '/features.npy')
+features = np.load(feature_dir + '/data.npy')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         try:
-            file = request.files['query_img']
+            file = request.files['query _img']
             img = Image.open(file.stream)  # PIL image
             uploaded_img_path = "static/uploaded/" + datetime.now().isoformat().replace(":", ".") + "_" + file.filename
         except:
@@ -43,7 +43,7 @@ def index():
         dists = np.linalg.norm(features-query, axis=1)  # L2 distances to features
         ids = np.argsort(dists)[:9]  # Top 9 results
         scores = [(dists[id], img_paths[id]) for id in ids]
-        
+        print("scores" + scores)
         return render_template('index.html',
                                query_path=uploaded_img_path,
                                scores=scores)
