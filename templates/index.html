@@ -160,40 +160,40 @@
                                 </td>
                                 {% endfor %}
                             </tr>
-                            <tr>
-                                {% for col_num in range(3,6) %}
-                                <td>
-                                    <div class="row" style="padding-bottom: 1%;">
-                                        <div class="column">
-                                            <figure style="float: left; margin-right: 20px; margin-bottom: 20px;">
-                                                <figcaption>
-                                                    Similarity Distance: {{ scores[col_num][0]|float|round(3) }}
-                                                    <br>File: {{ scores[col_num][1].name }}
-                                                </figcaption>
-                                                <img src="{{ scores[col_num][1] }}" width="235px" height="235px">
-                                            </figure>
-                                        </div>                                
-                                    </div>
-                                </td>
-                                {% endfor %}
-                            </tr>
-                            <tr>
-                                {% for col_num in range(6,9) %}
-                                <td>
-                                    <div class="row" style="padding-bottom: 1%;">
-                                        <div class="column">
-                                            <figure style="float: left; margin-right: 20px; margin-bottom: 20px;">
-                                                <figcaption>
-                                                    Similarity Distance: {{ scores[col_num][0]|float|round(3) }}
-                                                    <br>File: {{ scores[col_num][1].name }}
-                                                </figcaption>
-                                                <img src="{{ scores[col_num][1] }}" width="235px" height="235px">
-                                            </figure>
-                                        </div>                                
-                                    </div>
-                                </td>
-                                {% endfor %}
-                            </tr>
+                       </tr>
+                    <tr>
+                        {% for col_num in range(3,6) %}
+                        <td>
+                            <div class="row" style="padding-bottom: 1%;">
+                                <div class="column">
+                                    <figure style="float: left; margin-right: 20px; margin-bottom: 20px;">
+                                        <figcaption>
+                                            Similarity Distance: {{ scores[col_num][0]|float|round(3) }}
+                                            <br>File: {{ scores[col_num][1].name }}
+                                        </figcaption>
+                                        <img src="{{ scores[col_num][1] }}" width="235px" height="235px">
+                                    </figure>
+                                </div>
+                            </div>
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        {% for col_num in range(6,9) %}
+                        <td>
+                            <div class="row" style="padding-bottom: 1%;">
+                                <div class="column">
+                                    <figure style="float: left; margin-right: 20px; margin-bottom: 20px;">
+                                        <figcaption>
+                                            Similarity Distance: {{ scores[col_num][0]|float|round(3) }}
+                                            <br>File: {{ scores[col_num][1].name }}
+                                        </figcaption>
+                                        <img src="{{ scores[col_num][1] }}" width="235px" height="235px">
+                                    </figure>
+                                </div>
+                            </div>
+                        </td>
+                        {% endfor %}
                         </table>
                     </div>
                 </section>
